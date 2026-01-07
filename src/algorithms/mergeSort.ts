@@ -43,15 +43,24 @@ export default function mergeSort(data: string, onProgress: (p: number) => void)
         }
     }
 
+    let mergesCompleted = 0;
+    const totalMerges = arr.length - 1;
+
     function sort(left: number, right: number) {
-        if (left === right) return;
+        if (left >= right) return;
 
         const mid = Math.floor((left + right) / 2);
 
         sort(left, mid);
         sort(mid + 1, right);
         merge(left, mid, right);
+
+        mergesCompleted++;
+
+        onProgress((mergesCompleted / totalMerges) * 100)
     }
 
     sort(0, arr.length - 1);
+
+    return arr;
 }
