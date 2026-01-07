@@ -31,7 +31,5 @@ export default function heapSort(data: string, onProgress: (p: number) => void) 
         heapify(i, 0);
     }
 
-    onProgress(100);
-
     return arr;
 }

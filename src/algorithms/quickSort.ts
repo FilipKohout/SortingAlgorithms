@@ -20,7 +20,6 @@ export default function quickSort(data: string, onProgress: (p: number) => void)
         [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
 
         sortedElementsCount++;
-        onProgress((sortedElementsCount / arr.length) * 100);
 
         return i + 1;
     }
