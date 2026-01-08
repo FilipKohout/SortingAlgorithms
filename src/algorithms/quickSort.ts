@@ -13,7 +13,7 @@ export default function quickSort(data: string, onProgress: (p: number) => void)
         [arr[mid], arr[high]] = [arr[high], arr[mid]];
 
         for (let j = low; j < high; j++) {
-            if (arr[j] < pivot) {
+            if (arr[j] <= pivot) {
                 i++;
                 [arr[i], arr[j]] = [arr[j], arr[i]];
             }
@@ -29,13 +29,17 @@ export default function quickSort(data: string, onProgress: (p: number) => void)
     function sort(low: number = 0, high: number | null = null): void {
         if (high === null) high = arr.length - 1;
 
-        if (low < high) {
+        while (low < high) {
             const pi = partition(low, high);
-            sort(low, pi - 1);
-            sort(pi + 1, high);
-        }
-        else if (low === high){
-            sortedElementsCount++;
+
+            if (pi - low < high - pi) {
+                sort(low, pi - 1);
+                low = pi + 1;
+            } else {
+                sort(pi + 1, high);
+                high = pi - 1;
+            }
+
             onProgress((sortedElementsCount / arr.length) * 100);
         }
     }

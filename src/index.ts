@@ -1,5 +1,6 @@
 import algorithmWrapper from "./algorithmWrapper";
 import selectionSort from "./algorithms/selectionSort";
+import insertionSort from "./algorithms/insertionSort";
 import heapSort from "./algorithms/heapSort";
 import quickSort from "./algorithms/quickSort";
 import mergeSort from "./algorithms/mergeSort";
@@ -14,5 +15,17 @@ const fileNames = [
     "./raw/random_words_10M.txt",
 ]
 
-await algorithmWrapper(bubbleSort, fileNames[4]);
+const functions = [
+    radixSort,
+    quickSort,
+    mergeSort,
+    heapSort,
+    insertionSort,
+    selectionSort,
+    bubbleSort,
+]
+
+for (const fileName of fileNames) {
+    await algorithmWrapper(radixSort, fileName);
+}
 await new Promise(resolve => setTimeout(resolve, 100000000));

@@ -9,6 +9,8 @@ export default function algorithmWrapper(algorithm: (data: string, onProgress: (
         const start = performance.now();
         let finished = false;
         let savedProgress = 0;
+        let lastUpdate = 0;
+        let lastSummary: string | null;
 
         const timeout = setTimeout(() => {
             if (!finished) {
@@ -24,20 +26,29 @@ export default function algorithmWrapper(algorithm: (data: string, onProgress: (
             const estimatedTotalTime = milis / (savedProgress / 100);
             const remainingTime = ((estimatedTotalTime - milis) / 1000).toFixed(2);
 
-            process.stdout.write(`\rFinished: ${finished} | Progress: ${formattedProgress}% | Time: ${elapsed} s | Estimated: ${remainingTime} s`);
+            lastSummary = `Finished: ${finished} | Progress: ${formattedProgress}% | Time: ${elapsed} s | Estimated: ${remainingTime} s`;
+            process.stdout.write("\r" + lastSummary);
         }
 
         const onProgress = (progress: number) => {
+            if (performance.now() - lastUpdate < 100 && lastUpdate != 0 && !finished) return;
+            lastUpdate = performance.now();
+
             savedProgress = progress;
             updateConsole();
         };
 
         try {
-            const result = algorithm(data, onProgress);
+            const result: any[] = algorithm(data, onProgress);
             finished = true;
 
             clearTimeout(timeout);
+
+            savedProgress = 100;
             updateConsole();
+
+            console.log("\nSaving result to file...");
+            fs.writeFile(`./out/result-${algorithm.name}-${file.split("/").pop()}`, (lastSummary! ?? "Unknown") + "\n" + result.join("\n"), { encoding: "utf-8" }, (err) => {});
 
             resolve(result);
         } catch (err) {
