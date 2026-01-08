@@ -1,5 +1,7 @@
 export default function insertionSort(data: string, onProgress: (p: number) => void) {
-    const arr = data.split("\n").map(Number);
+    const rawArray = data.split("\n");
+    const isNumeric = !isNaN(Number(rawArray[0]));
+    const arr: any[] = isNumeric ? rawArray.map(Number) : rawArray;
 
     for (let i = 1; i < arr.length; i++) {
         let current = arr[i]

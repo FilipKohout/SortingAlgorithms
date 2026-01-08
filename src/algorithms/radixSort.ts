@@ -1,14 +1,17 @@
 export default function radixSort(data: string, onProgress: (p: number) => void) {
-    const rawArr = data.split("\n").map(Number);
+    const rawArray = data.split("\n");
+    const isNumeric = !isNaN(Number(rawArray[0]));
+    const arr: any[] = isNumeric ? rawArray.map(Number) : rawArray;
+
     const negatives: number[] = [];
     const positives: number[] = [];
     let globalMax = 0;
 
-    for (let i = 0; i < rawArr.length; i++) {
-        if (Math.abs(rawArr[i]) > globalMax) globalMax = Math.abs(rawArr[i]);
+    for (let i = 0; i < arr.length; i++) {
+        if (Math.abs(arr[i]) > globalMax) globalMax = Math.abs(arr[i]);
 
-        if (rawArr[i] < 0) negatives.push(rawArr[i]);
-        else positives.push(rawArr[i]);
+        if (arr[i] < 0) negatives.push(arr[i]);
+        else positives.push(arr[i]);
     }
 
     const totalMaxDigits = Math.floor(Math.log10(globalMax || 1)) + 1;
